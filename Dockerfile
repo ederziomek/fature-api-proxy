@@ -2,15 +2,10 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Instalar dependências do sistema
-RUN apt-get update && apt-get install -y \
-    gcc \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copiar requirements
+# Copiar requirements primeiro
 COPY requirements.txt .
 
-# Instalar dependências Python
+# Instalar dependências Python sem dependências do sistema
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copiar código da aplicação
@@ -23,9 +18,9 @@ EXPOSE 3000
 ENV FLASK_APP=src/main.py
 ENV FLASK_ENV=production
 
-# Health check
+# Health check simples
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:3000/health || exit 1
+    CMD python -c "import requests; requests.get('http://localhost:3000/health')" || exit 1
 
 # Comando para iniciar a aplicação
 CMD ["python", "src/main.py"]
