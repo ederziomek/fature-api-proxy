@@ -28,7 +28,7 @@ rate_limit_store = {}
 # Configuração de APIs externas
 EXTERNAL_APIS = {
     'fature-internal': {
-        'base_url': 'http://api-gateway.fature.svc.cluster.local',
+        'base_url': 'https://fature-api-gateway-production.up.railway.app',
         'timeout': 30,
         'cache_enabled': True
     },
@@ -38,7 +38,7 @@ EXTERNAL_APIS = {
         'cache_enabled': True
     },
     'reports': {
-        'base_url': 'http://report-service.fature.svc.cluster.local',
+        'base_url': 'https://fature-report-service-production.up.railway.app',
         'timeout': 120,
         'cache_enabled': False  # Relatórios sempre atualizados
     }
@@ -101,6 +101,29 @@ def set_cache(cache_key, data):
         'data': data,
         'timestamp': datetime.now()
     }
+
+@app.route('/', methods=['GET'])
+def index():
+    """Página inicial do API Proxy"""
+    return jsonify({
+        'service': 'fature-api-proxy',
+        'version': '2.0',
+        'status': 'running',
+        'timestamp': datetime.now().isoformat(),
+        'available_apis': list(EXTERNAL_APIS.keys()),
+        'endpoints': {
+            'health': '/health',
+            'proxy': '/proxy/<api_name>/<endpoint>',
+            'cache_stats': '/cache/stats',
+            'cache_clear': '/cache/clear (POST)',
+            'apis': '/apis'
+        },
+        'usage': {
+            'external_data': '/proxy/external-data/data/v2/users',
+            'fature_internal': '/proxy/fature-internal/api/v1/users',
+            'reports': '/proxy/reports/api/reports/daily'
+        }
+    })
 
 @app.route('/health', methods=['GET'])
 def health_check():
