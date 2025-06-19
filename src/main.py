@@ -33,7 +33,7 @@ EXTERNAL_APIS = {
         'cache_enabled': True
     },
     'external-data': {
-        'base_url': 'http://real-data-service.fature.svc.cluster.local',
+        'base_url': 'https://fature-real-data-service-production.up.railway.app',
         'timeout': 60,
         'cache_enabled': True
     },
