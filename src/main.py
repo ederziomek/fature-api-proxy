@@ -18,7 +18,7 @@ CORS(app, origins="*")
 
 # Configurações do API Proxy
 app.config['SECRET_KEY'] = 'api_proxy_secret_key_2025'
-app.config['CACHE_TIMEOUT'] = 300  # 5 minutos
+app.config['CACHE_TIMEOUT'] = 1800  # 30 minutos
 app.config['RATE_LIMIT'] = 100  # requests por minuto
 
 # Cache em memória simples
@@ -34,7 +34,7 @@ EXTERNAL_APIS = {
     },
     'external-data': {
         'base_url': 'https://fature-real-data-service-production.up.railway.app',
-        'timeout': 60,
+        'timeout': 180,
         'cache_enabled': True
     },
     'reports': {
